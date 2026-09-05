@@ -1,4 +1,5 @@
 import { CreateAlert } from "@/lib/actions/CreateAlert.action";
+import { GetAlerts } from "@/lib/actions/GetAlerts.action";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
 
@@ -11,6 +12,12 @@ export async function POST() {
     message: "A user has failed to log in multiple times.",
     status: "ACTIVE",
   });
+
+  return NextResponse.json(result);
+}
+
+export async function GET() {
+  const result = await GetAlerts();
 
   return NextResponse.json(result);
 }

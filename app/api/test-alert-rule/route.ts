@@ -1,4 +1,5 @@
 import { CreateAlertRule } from "@/lib/actions/CreateAlertRule.action";
+import { GetAlertRules } from "@/lib/actions/GetAlert-Rules.action";
 import { NextResponse } from "next/server";
 
 export async function POST() {
@@ -11,6 +12,12 @@ export async function POST() {
     severity: "HIGH",
     isActive: true,
   });
+
+  return NextResponse.json(result);
+}
+
+export async function GET() {
+  const result = await GetAlertRules();
 
   return NextResponse.json(result);
 }
