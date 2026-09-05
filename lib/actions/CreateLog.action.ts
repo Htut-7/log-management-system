@@ -12,7 +12,10 @@ export async function CreateLog(params: {
   status: string;
   message: string;
   action: string;
-}) {
+}): Promise<{
+  success: boolean;
+  message: string;
+}> {
   await dbConnect();
   const validatedData = validateBody(params, LogSchema);
   const { user, status, action, message } = validatedData.data;

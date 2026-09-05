@@ -2,11 +2,14 @@
 
 import dbConnect from "@/database/dbConnect";
 import { actionError } from "../response";
-import User from "@/database/models/user.model";
+import User, { IUser } from "@/database/models/user.model";
 import validateBody from "../validateBody";
 import GetUsersSchema from "../schema/GetUsersSchema";
 
-export async function GetUsers() {
+export async function GetUsers(): Promise<{
+  success: boolean;
+  data?: IUser[];
+}> {
   await dbConnect();
 
   try {
@@ -21,7 +24,10 @@ export async function GetUsers() {
   }
 }
 
-export async function GetUserById(params: { userId: string }) {
+export async function GetUserById(params: { userId: string }): Promise<{
+  success: boolean;
+  data?: IUser[];
+}> {
   await dbConnect();
 
   const validatedData = validateBody(params, GetUsersSchema);

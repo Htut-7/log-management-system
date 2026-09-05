@@ -14,7 +14,10 @@ export async function CreateAlertRule(params: {
   timeWindow: number;
   severity: string;
   isActive: boolean;
-}) {
+}): Promise<{
+  success: boolean;
+  message: string;
+}> {
   await dbConnect();
   const validatedData = validateBody(params, AlertRuleSchema);
   const {

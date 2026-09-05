@@ -15,7 +15,10 @@ export async function CreateAlert(params: {
   message: string;
   status: string;
   log?: Types.ObjectId;
-}) {
+}): Promise<{
+  success: boolean;
+  message: string;
+}> {
   await dbConnect();
   const validatedData = validateBody(params, AlertSchema);
   const { user, rule, severity, title, message, status, log } =

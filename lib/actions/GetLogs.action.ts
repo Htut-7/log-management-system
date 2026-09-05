@@ -1,10 +1,13 @@
 "use server";
 
 import dbConnect from "@/database/dbConnect";
-import Log from "@/database/models/log.model";
+import Log, { ILog } from "@/database/models/log.model";
 import { actionError } from "../response";
 
-export async function GetLogs() {
+export async function GetLogs(): Promise<{
+  success: boolean;
+  data?: ILog[];
+}> {
   await dbConnect();
 
   try {

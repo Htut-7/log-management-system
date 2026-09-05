@@ -2,9 +2,12 @@
 
 import dbConnect from "@/database/dbConnect";
 import { actionError } from "../response";
-import Alert from "@/database/models/alert.model";
+import Alert, { IAlert } from "@/database/models/alert.model";
 
-export async function GetAlerts() {
+export async function GetAlerts(): Promise<{
+  success: boolean;
+  data?: IAlert[];
+}> {
   await dbConnect();
 
   try {
