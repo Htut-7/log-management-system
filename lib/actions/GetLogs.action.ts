@@ -11,6 +11,8 @@ export async function GetLogs(params?: {
   user?: string;
   srcIp?: string;
   severity?: number;
+  from?: Date;
+  to?: Date;
 }): Promise<{
   success: boolean;
   data?: ILog[];
@@ -42,6 +44,18 @@ export async function GetLogs(params?: {
 
     if (params?.severity !== undefined) {
       query.severity = params.severity;
+    }
+
+    if (params?.from || params?.to) {
+      query.timestamp = {};
+    }
+
+    if (params?.from) {
+      (query.timestamp as Record<string, Date>).$gte = params.from;
+    }
+
+    if (params?.to) {
+      (query.timestamp as Record<string, Date>).$lte = params.to;
     }
 
     const logs = await Log.find(query);

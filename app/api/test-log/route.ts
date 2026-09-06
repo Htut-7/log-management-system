@@ -13,6 +13,10 @@ export async function GET(request: Request) {
     severity: searchParams.get("severity")
       ? Number(searchParams.get("severity"))
       : undefined,
+    from: searchParams.get("from")
+      ? new Date(searchParams.get("from")!)
+      : undefined,
+    to: searchParams.get("to") ? new Date(searchParams.get("to")!) : undefined,
   });
 
   return NextResponse.json(result);
