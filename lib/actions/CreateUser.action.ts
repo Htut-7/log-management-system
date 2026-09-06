@@ -5,6 +5,7 @@ import validateBody from "../validateBody";
 import UserSchema from "../schema/UserSchema";
 import { actionError } from "../response";
 import User from "@/database/models/user.model";
+import bcrypt from "bcryptjs";
 
 export async function CreateUser(params: {
   username: string;
@@ -24,10 +25,14 @@ export async function CreateUser(params: {
     validatedData.data;
 
   try {
+    const hashedPassword = password
+      ? await bcrypt.hash(password, 10)
+      : undefined;
+
     await User.create({
       username,
       email,
-      password,
+      password: hashedPassword,
       image,
       role,
       isActive,
@@ -36,7 +41,7 @@ export async function CreateUser(params: {
 
     return {
       success: true,
-      message: "User create successfully",
+      message: "User created successfully",
     };
   } catch (e) {
     return actionError(e);
