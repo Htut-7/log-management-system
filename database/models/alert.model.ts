@@ -9,6 +9,7 @@ export interface IAlert {
   status: string;
   log?: Types.ObjectId;
   tenant: string;
+  sourceIp?: string;
 }
 
 export interface IAlertDoc extends IAlert, Document {}
@@ -49,6 +50,11 @@ const alertSchema = new Schema(
     tenant: {
       type: String,
       required: true,
+      index: true,
+    },
+    sourceIp: {
+      type: String,
+      required: false,
       index: true,
     },
   },

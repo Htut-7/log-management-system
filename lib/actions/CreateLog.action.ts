@@ -7,7 +7,7 @@ import LogSchema from "../schema/LogSchema";
 import { actionError } from "../response";
 import { auth } from "@/auth";
 
-export async function CreateLog(params: ILog): Promise<{
+export async function CreateLog(params: Omit<ILog, "tenant">): Promise<{
   success: boolean;
   message: string;
 }> {

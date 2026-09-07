@@ -10,6 +10,7 @@ const AlertSchema = z.object({
   status: z.string(),
   log: z.instanceof(Types.ObjectId).optional(),
   tenant: z.string(),
+  sourceIp: z.string().optional(),
 });
 
 export default AlertSchema;

@@ -2,7 +2,6 @@ import z from "zod";
 
 const LogSchema = z.object({
   timestamp: z.coerce.date(),
-  tenant: z.string(),
   source: z.string(),
   vendor: z.string().optional(),
   product: z.string().optional(),

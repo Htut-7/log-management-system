@@ -5,6 +5,7 @@ import { actionError } from "../response";
 import AlertRule from "@/database/models/alert-rules.model";
 import Log from "@/database/models/log.model";
 import { CreateAlert } from "./CreateAlert.action";
+import Alert from "@/database/models/alert.model";
 
 export async function DetectAlert(): Promise<{
   success: boolean;
@@ -24,6 +25,7 @@ export async function DetectAlert(): Promise<{
 
       const logs = await Log.find({
         eventType: rule.event,
+        tenant: rule.tenant,
         timestamp: {
           $gte: startTime,
           $lte: now,
@@ -39,12 +41,25 @@ export async function DetectAlert(): Promise<{
       }
       for (const [srcIp, count] of ipCounts) {
         if (count >= rule.threshold) {
+          const existingAlert = await Alert.findOne({
+            rule: rule._id,
+            tenant: rule.tenant,
+            sourceIp: srcIp,
+            status: "OPEN",
+          });
+
+          if (existingAlert) {
+            continue;
+          }
+
           await CreateAlert({
             rule: rule._id,
             severity: rule.severity,
             title: rule.name,
             message: `${count} ${rule.event} events detected from ${srcIp} within ${rule.timeWindow} minutes`,
             status: "OPEN",
+            tenant: rule.tenant,
+            sourceIp: srcIp,
           });
         }
       }

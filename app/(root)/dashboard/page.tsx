@@ -1,4 +1,6 @@
 import { auth } from "@/auth";
+import TestDetectAlertButton from "@/Components/alertdetct";
+import TestLogButton from "@/Components/text";
 import { redirect } from "next/navigation";
 import React from "react";
 
@@ -18,6 +20,8 @@ async function DashboardPage() {
       <h2>Welcome {session.user?.name}</h2>
       <p>Role: {session.user?.role}</p>
       <p>Tenant: {session.user?.tenant}</p>
+      <TestLogButton />
+      <TestDetectAlertButton />
     </div>
   );
 }

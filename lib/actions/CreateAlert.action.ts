@@ -15,14 +15,25 @@ export async function CreateAlert(params: {
   message: string;
   status: string;
   log?: Types.ObjectId;
+  tenant: string;
+  sourceIp?: string;
 }): Promise<{
   success: boolean;
   message: string;
 }> {
   await dbConnect();
   const validatedData = validateBody(params, AlertSchema);
-  const { user, rule, severity, title, message, status, log } =
-    validatedData.data;
+  const {
+    user,
+    rule,
+    severity,
+    title,
+    message,
+    status,
+    log,
+    tenant,
+    sourceIp,
+  } = validatedData.data;
 
   try {
     await Alert.create({
@@ -33,6 +44,8 @@ export async function CreateAlert(params: {
       message,
       status,
       log,
+      tenant,
+      sourceIp,
     });
 
     return {
