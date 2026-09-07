@@ -9,12 +9,15 @@ async function DashboardPage() {
     redirect("/Login");
   }
 
+  console.log("SESSION:", session);
+
   return (
     <div>
       <h1>Dashboard</h1>
 
       <h2>Welcome {session.user?.name}</h2>
       <p>Role: {session.user?.role}</p>
+      <p>Tenant: {session.user?.tenant}</p>
     </div>
   );
 }

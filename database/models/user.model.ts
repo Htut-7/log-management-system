@@ -8,6 +8,7 @@ export interface IUser {
   role: string;
   isActive: boolean;
   lastLogin?: Date;
+  tenant: string;
 }
 
 export interface IUserDoc extends IUser, Document {}
@@ -41,6 +42,11 @@ const userSchema = new Schema(
     lastLogin: {
       type: Date,
       required: false,
+    },
+    tenant: {
+      type: String,
+      required: true,
+      index: true,
     },
   },
   { timestamps: true },

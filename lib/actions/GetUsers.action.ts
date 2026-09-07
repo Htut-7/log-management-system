@@ -26,7 +26,7 @@ export async function GetUsers(): Promise<{
 
 export async function GetUserById(params: { userId: string }): Promise<{
   success: boolean;
-  data?: IUser[];
+  data?: IUser;
 }> {
   await dbConnect();
 

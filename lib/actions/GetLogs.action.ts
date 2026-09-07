@@ -3,6 +3,7 @@
 import dbConnect from "@/database/dbConnect";
 import Log, { ILog } from "@/database/models/log.model";
 import { actionError } from "../response";
+import { auth } from "@/auth";
 
 export async function GetLogs(params?: {
   tenant?: string;
@@ -19,12 +20,19 @@ export async function GetLogs(params?: {
 }> {
   await dbConnect();
 
+  const session = await auth();
+
+  if (!session) {
+    return {
+      success: false,
+      data: [],
+    };
+  }
+
   try {
     const query: Record<string, unknown> = {};
 
-    if (params?.tenant) {
-      query.tenant = params.tenant;
-    }
+    query.tenant = session?.user.tenant;
 
     if (params?.source) {
       query.source = params.source;

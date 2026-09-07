@@ -15,14 +15,23 @@ export async function CreateUser(params: {
   role: string;
   isActive: boolean;
   lastLogin?: Date;
+  tenant: string;
 }): Promise<{
   success: boolean;
   message: string;
 }> {
   await dbConnect();
   const validatedData = validateBody(params, UserSchema);
-  const { username, email, password, image, role, isActive, lastLogin } =
-    validatedData.data;
+  const {
+    username,
+    email,
+    password,
+    image,
+    role,
+    isActive,
+    lastLogin,
+    tenant,
+  } = validatedData.data;
 
   try {
     const hashedPassword = password
@@ -37,6 +46,7 @@ export async function CreateUser(params: {
       role,
       isActive,
       lastLogin,
+      tenant,
     });
 
     return {

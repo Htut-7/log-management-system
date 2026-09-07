@@ -8,6 +8,7 @@ const UserSchema = z.object({
   role: z.string(),
   isActive: z.boolean(),
   lastLogin: z.date().optional(),
+  tenant: z.string(),
 });
 
 export default UserSchema;
