@@ -8,6 +8,7 @@ const AlertRuleSchema = z.object({
   timeWindow: z.number(),
   severity: z.string(),
   isActive: z.boolean(),
+  tenant: z.string(),
 });
 
 export default AlertRuleSchema;

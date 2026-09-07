@@ -5,6 +5,7 @@ import validateBody from "../validateBody";
 import AlertRuleSchema from "../schema/AlertRuleSchema";
 import { actionError } from "../response";
 import AlertRule from "@/database/models/alert-rules.model";
+import { auth } from "@/auth";
 
 export async function CreateAlertRule(params: {
   name: string;
@@ -19,6 +20,23 @@ export async function CreateAlertRule(params: {
   message: string;
 }> {
   await dbConnect();
+
+  const session = await auth();
+
+  if (!session?.user?.tenant) {
+    return {
+      success: false,
+      message: "Unauthorized",
+    };
+  }
+
+  if (session?.user?.role !== "ADMIN") {
+    return {
+      success: false,
+      message: "Forbidden",
+    };
+  }
+
   const validatedData = validateBody(params, AlertRuleSchema);
   const {
     name,
@@ -39,6 +57,7 @@ export async function CreateAlertRule(params: {
       timeWindow,
       severity,
       isActive,
+      tenant: session?.user.tenant,
     });
 
     return {

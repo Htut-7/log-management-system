@@ -8,6 +8,7 @@ export interface IAlertRule {
   timeWindow: number;
   severity: string;
   isActive: boolean;
+  tenant: string;
 }
 
 export interface IAlertRuleDoc extends IAlertRule, Document {}
@@ -41,6 +42,11 @@ const alertRulesSchema = new Schema(
     isActive: {
       type: Boolean,
       required: true,
+    },
+    tenant: {
+      type: String,
+      required: true,
+      index: true,
     },
   },
   { timestamps: true },

@@ -32,7 +32,7 @@ export async function GetLogs(params?: {
   try {
     const query: Record<string, unknown> = {};
 
-    query.tenant = session?.user.tenant;
+    query.tenant = session.user.tenant;
 
     if (params?.source) {
       query.source = params.source;

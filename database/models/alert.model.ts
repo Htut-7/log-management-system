@@ -8,6 +8,7 @@ export interface IAlert {
   message: string;
   status: string;
   log?: Types.ObjectId;
+  tenant: string;
 }
 
 export interface IAlertDoc extends IAlert, Document {}
@@ -44,6 +45,11 @@ const alertSchema = new Schema(
       type: Schema.Types.ObjectId,
       required: false,
       ref: "Log",
+    },
+    tenant: {
+      type: String,
+      required: true,
+      index: true,
     },
   },
   { timestamps: true },

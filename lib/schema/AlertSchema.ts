@@ -9,6 +9,7 @@ const AlertSchema = z.object({
   message: z.string(),
   status: z.string(),
   log: z.instanceof(Types.ObjectId).optional(),
+  tenant: z.string(),
 });
 
 export default AlertSchema;
