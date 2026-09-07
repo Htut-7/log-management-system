@@ -15,14 +15,13 @@ export async function BatchIngestion(param: {
 }> {
   try {
     const validatedData = validateBody(param, BatchIngestionSchema);
-    const { tenant, source, data } = validatedData.data;
+    const { source, data } = validatedData.data;
 
     for (const item of data) {
       const logData = item as Record<string, unknown>;
 
       await CreateLog({
         timestamp: new Date(),
-        tenant,
         source,
         eventType: "network",
         action: logData.action as string | undefined,
