@@ -1,5 +1,8 @@
 import { auth } from "@/auth";
 import TestDetectAlertButton from "@/Components/alertdetct";
+import TestApiIngestionButton from "@/Components/apiIngestionButton";
+import TestAwsIngestionButton from "@/Components/testaws";
+import TestSyslogButton from "@/Components/testsysLogButton";
 import TestLogButton from "@/Components/text";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -22,6 +25,9 @@ async function DashboardPage() {
       <p>Tenant: {session.user?.tenant}</p>
       <TestLogButton />
       <TestDetectAlertButton />
+      <TestApiIngestionButton />
+      <TestAwsIngestionButton />
+      <TestSyslogButton />
     </div>
   );
 }

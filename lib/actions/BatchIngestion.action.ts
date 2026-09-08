@@ -1,12 +1,12 @@
 "use server";
 
+import { NormalizeLog } from "../normalizers/NormalizeLog";
 import { actionError } from "../response";
 import BatchIngestionSchema from "../schema/BatchIngestionSchema";
 import validateBody from "../validateBody";
 import { CreateLog } from "./CreateLog.action";
 
 export async function BatchIngestion(param: {
-  tenant: string;
   source: string;
   data: unknown[];
 }): Promise<{
@@ -20,19 +20,9 @@ export async function BatchIngestion(param: {
     for (const item of data) {
       const logData = item as Record<string, unknown>;
 
-      await CreateLog({
-        timestamp: new Date(),
-        source,
-        eventType: "network",
-        action: logData.action as string | undefined,
-        srcIp: logData.src as string | undefined,
-        srcPort: logData.spt as number | undefined,
-        dstIp: logData.dst as string | undefined,
-        dstPort: logData.dpt as number | undefined,
-        protocol: logData.proto as string | undefined,
-        raw: item,
-        tags: [source],
-      });
+      const normalizedLog = NormalizeLog(source, logData);
+
+      await CreateLog(normalizedLog);
     }
 
     return {

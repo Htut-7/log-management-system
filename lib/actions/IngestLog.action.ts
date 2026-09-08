@@ -1,5 +1,6 @@
 "use server";
 
+import { NormalizeLog } from "../normalizers/NormalizeLog";
 import { actionError } from "../response";
 import LogIngestSchema from "../schema/LogIngestSchema";
 import validateBody from "../validateBody";
@@ -12,19 +13,9 @@ export async function IngestLog(params: { source: string; data: unknown }) {
 
     const logData = data as Record<string, unknown>;
 
-    const result = await CreateLog({
-      timestamp: new Date(),
-      source,
-      eventType: "network",
-      action: logData.action as string | undefined,
-      srcIp: logData.src as string | undefined,
-      srcPort: logData.spt as number | undefined,
-      dstIp: logData.dst as string | undefined,
-      dstPort: logData.dpt as number | undefined,
-      protocol: logData.proto as string | undefined,
-      raw: data,
-      tags: [source],
-    });
+    const normalizedLog = NormalizeLog(source, logData);
+
+    const result = await CreateLog(normalizedLog);
 
     return result;
   } catch (e) {

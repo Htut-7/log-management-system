@@ -5,7 +5,7 @@ import IngestCrowdStrikeSchema from "../schema/IngestCrowdStrikeSchema";
 import validateBody from "../validateBody";
 import { CreateLog } from "./CreateLog.action";
 
-export async function IngestCrowdStrik(params: {
+export async function IngestCrowdStrike(params: {
   tenant: string;
   source: string;
   event_type: string;
