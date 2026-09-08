@@ -5,20 +5,15 @@ import LogIngestSchema from "../schema/LogIngestSchema";
 import validateBody from "../validateBody";
 import { CreateLog } from "./CreateLog.action";
 
-export async function IngestLog(params: {
-  tenant: string;
-  source: string;
-  data: unknown;
-}) {
+export async function IngestLog(params: { source: string; data: unknown }) {
   try {
     const validatedData = validateBody(params, LogIngestSchema);
-    const { tenant, source, data } = validatedData.data;
+    const { source, data } = validatedData.data;
 
     const logData = data as Record<string, unknown>;
 
     const result = await CreateLog({
       timestamp: new Date(),
-      tenant,
       source,
       eventType: "network",
       action: logData.action as string | undefined,
