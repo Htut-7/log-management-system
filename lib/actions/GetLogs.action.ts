@@ -5,8 +5,21 @@ import Log, { ILog } from "@/database/models/log.model";
 import { actionError } from "../response";
 import { auth } from "@/auth";
 
+type LeanLog = ILog & {
+  _id: unknown;
+  createdAt?: Date;
+  updatedAt?: Date;
+  __v?: number;
+};
+
+type SerializedLog = Omit<ILog, "timestamp"> & {
+  _id: string;
+  timestamp: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
 export async function GetLogs(params?: {
-  tenant?: string;
   source?: string;
   eventType?: string;
   user?: string;
@@ -16,13 +29,13 @@ export async function GetLogs(params?: {
   to?: Date;
 }): Promise<{
   success: boolean;
-  data?: ILog[];
+  data?: SerializedLog[];
 }> {
   await dbConnect();
 
   const session = await auth();
 
-  if (!session) {
+  if (!session?.user?.tenant) {
     return {
       success: false,
       data: [],
@@ -30,9 +43,9 @@ export async function GetLogs(params?: {
   }
 
   try {
-    const query: Record<string, unknown> = {};
-
-    query.tenant = session.user.tenant;
+    const query: Record<string, unknown> = {
+      tenant: session.user.tenant,
+    };
 
     if (params?.source) {
       query.source = params.source;
@@ -66,11 +79,34 @@ export async function GetLogs(params?: {
       (query.timestamp as Record<string, Date>).$lte = params.to;
     }
 
-    const logs = await Log.find(query);
+    const logs = (await Log.find(query)
+      .sort({
+        timestamp: -1,
+      })
+      .lean()) as LeanLog[];
+
+    const serializedLogs: SerializedLog[] = logs.map((log) => ({
+      ...log,
+
+      _id: String(log._id),
+
+      timestamp:
+        log.timestamp instanceof Date
+          ? log.timestamp.toISOString()
+          : new Date(log.timestamp).toISOString(),
+
+      createdAt: log.createdAt
+        ? new Date(log.createdAt).toISOString()
+        : undefined,
+
+      updatedAt: log.updatedAt
+        ? new Date(log.updatedAt).toISOString()
+        : undefined,
+    }));
 
     return {
       success: true,
-      data: logs,
+      data: serializedLogs,
     };
   } catch (e) {
     return actionError(e);
