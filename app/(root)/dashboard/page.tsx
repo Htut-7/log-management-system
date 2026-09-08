@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import TestDetectAlertButton from "@/Components/alertdetct";
 import TestApiIngestionButton from "@/Components/apiIngestionButton";
 import TestAwsIngestionButton from "@/Components/testaws";
+import TestGetAlertsButton from "@/Components/testGetAlert";
 import TestSyslogButton from "@/Components/testsysLogButton";
 import TestLogButton from "@/Components/text";
 import { redirect } from "next/navigation";
@@ -28,6 +29,7 @@ async function DashboardPage() {
       <TestApiIngestionButton />
       <TestAwsIngestionButton />
       <TestSyslogButton />
+      <TestGetAlertsButton />
     </div>
   );
 }

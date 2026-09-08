@@ -6,6 +6,7 @@ import { parseSysLog } from "../utils/parseSysLog";
 import validateBody from "../validateBody";
 import IngestSysLogSchema from "../schema/IngestSysLogSchema";
 import { NormalizeLog } from "../normalizers/NormalizeLog";
+import { DetectAlert } from "./DetectAlert.action";
 
 export async function IngestSysLog(params: {
   source: string;
@@ -23,6 +24,11 @@ export async function IngestSysLog(params: {
       ...normalizedLog,
       raw: message,
     });
+
+    if (result.success) {
+      await DetectAlert();
+    }
+
     return result;
   } catch (e) {
     return actionError(e);

@@ -5,6 +5,7 @@ import { actionError } from "../response";
 import LogIngestSchema from "../schema/LogIngestSchema";
 import validateBody from "../validateBody";
 import { CreateLog } from "./CreateLog.action";
+import { DetectAlert } from "./DetectAlert.action";
 
 export async function IngestLog(params: { source: string; data: unknown }) {
   try {
@@ -16,6 +17,10 @@ export async function IngestLog(params: { source: string; data: unknown }) {
     const normalizedLog = NormalizeLog(source, logData);
 
     const result = await CreateLog(normalizedLog);
+
+    if (result.success) {
+      await DetectAlert();
+    }
 
     return result;
   } catch (e) {

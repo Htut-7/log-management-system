@@ -5,6 +5,7 @@ import { actionError } from "../response";
 import BatchIngestionSchema from "../schema/BatchIngestionSchema";
 import validateBody from "../validateBody";
 import { CreateLog } from "./CreateLog.action";
+import { DetectAlert } from "./DetectAlert.action";
 
 export async function BatchIngestion(param: {
   source: string;
@@ -24,6 +25,8 @@ export async function BatchIngestion(param: {
 
       await CreateLog(normalizedLog);
     }
+
+    await DetectAlert();
 
     return {
       success: true,
