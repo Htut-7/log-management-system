@@ -1,0 +1,12 @@
+[
+  {
+    "event_type": "app_login_failed",
+    "user": "alice",
+    "ip": "203.0.113.50"
+  },
+  {
+    "event_type": "app_login_success",
+    "user": "bob",
+    "ip": "203.0.113.51"
+  }
+]

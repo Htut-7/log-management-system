@@ -1,4 +1,3 @@
-import { timeStamp } from "console";
 import { Schema, model, models, Document } from "mongoose";
 
 export interface ILog {

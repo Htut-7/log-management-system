@@ -1,4 +1,5 @@
 import { auth, signOut } from "@/auth";
+import { GetOpenAlertCount } from "@/lib/actions/GetOpenAlertCount.action";
 import ROUTES from "@/ROUTES";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -15,6 +16,8 @@ export default async function RootLayout({
   }
 
   const isAdmin = session.user.role === "ADMIN";
+
+  const { count: openAlertCount } = await GetOpenAlertCount();
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#0b0f14] text-slate-200">
@@ -100,22 +103,28 @@ export default async function RootLayout({
 
             <Link
               href={ROUTES.ALERTS}
-              className="group flex items-center gap-3 border border-transparent px-3 py-2.5 text-sm text-slate-400 transition hover:border-slate-800 hover:bg-[#111820] hover:text-slate-100"
+              className="flex items-center justify-between border border-transparent px-3 py-2.5 text-sm text-slate-400 transition hover:border-slate-800 hover:bg-[#111820] hover:text-slate-200"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                className="h-4.5 w-4.5 text-slate-500 transition group-hover:text-amber-400"
-                stroke="currentColor"
-                strokeWidth="1.7"
-              >
-                <path d="M12 3 3 20h18L12 3Z" />
-                <path d="M12 9v4M12 17h.01" />
-              </svg>
+              <div className="flex items-center gap-3">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="h-4 w-4"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                >
+                  <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
+                  <path d="M10 21h4" />
+                </svg>
 
-              <span className="flex-1">Alerts</span>
+                <span>Alerts</span>
+              </div>
 
-              <span className="h-2 w-2 rounded-full bg-red-400" />
+              {openAlertCount > 0 && (
+                <span className="min-w-5 border border-red-900 bg-red-950/60 px-1.5 py-0.5 text-center font-mono text-[10px] font-semibold text-red-400">
+                  {openAlertCount > 99 ? "99+" : openAlertCount}
+                </span>
+              )}
             </Link>
           </div>
 

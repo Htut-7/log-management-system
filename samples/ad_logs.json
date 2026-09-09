@@ -1,0 +1,14 @@
+[
+  {
+    "event_id": 4625,
+    "user": "domain-user",
+    "host": "DC01",
+    "ip": "10.0.0.25"
+  },
+  {
+    "event_id": 4624,
+    "user": "administrator",
+    "host": "DC01",
+    "ip": "10.0.0.10"
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "event_type": "ConsoleLogin",
+    "user": "cloud-admin"
+  },
+  {
+    "event_type": "CreateUser",
+    "user": "iam-admin"
+  }
+]
