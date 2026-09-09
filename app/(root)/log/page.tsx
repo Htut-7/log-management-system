@@ -1,4 +1,5 @@
 import { GetLogs } from "@/lib/actions/GetLogs.action";
+import ROUTES from "@/ROUTES";
 
 export default async function LogsPage({
   searchParams,
@@ -32,177 +33,160 @@ export default async function LogsPage({
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-full bg-[#0b0f14] px-5 py-6 sm:px-7 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-7 flex flex-col gap-4 border-b border-slate-800 pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-              Logs
+            <div className="mb-2 flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+
+              <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-emerald-400">
+                Live Data
+              </span>
+            </div>
+
+            <h1 className="text-2xl font-semibold tracking-tight text-white">
+              Log Explorer
             </h1>
+
             <p className="mt-1 text-sm text-slate-500">
-              View and filter system log entries across all sources
+              Search and investigate normalized security events
             </p>
           </div>
-          <div className="flex items-center gap-3 rounded-lg bg-white px-4 py-2 shadow-sm ring-1 ring-slate-200">
-            <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
-            <span className="text-sm font-medium text-slate-700">
-              {success ? data.length : 0} results
+
+          <div className="flex items-center gap-3 border border-slate-800 bg-[#0e141b] px-3 py-2">
+            <span className="h-2 w-2 rounded-full bg-cyan-400" />
+
+            <span className="font-mono text-xs text-slate-400">
+              {success ? data.length : 0} events
             </span>
           </div>
         </div>
 
         <form
           method="GET"
-          className="mb-8 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6"
+          className="mb-6 border border-slate-800 bg-[#0e141b]"
         >
-          <div className="mb-4 flex items-center gap-2">
+          <div className="flex items-center justify-between border-b border-slate-800 px-5 py-4">
+            <div>
+              <h2 className="text-sm font-semibold text-slate-200">
+                Search Filters
+              </h2>
+
+              <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.14em] text-slate-600">
+                Filter normalized log events
+              </p>
+            </div>
+
             <svg
-              className="h-5 w-5 text-slate-400"
-              fill="none"
-              stroke="currentColor"
               viewBox="0 0 24 24"
+              fill="none"
+              className="h-5 w-5 text-slate-600"
+              stroke="currentColor"
+              strokeWidth="1.7"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-              />
+              <path d="M4 5h16l-6 7v5l-4 2v-7L4 5Z" />
             </svg>
-            <h2 className="text-base font-semibold text-slate-800">
-              Filter Logs
-            </h2>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-slate-600">
-                Source
-              </label>
+          <div className="grid gap-4 p-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <FilterField label="Source">
               <select
                 name="source"
                 defaultValue={params.source || ""}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm transition-all placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full border border-slate-700 bg-[#0b0f14] px-3 py-2.5 text-sm text-slate-300 outline-none transition focus:border-cyan-500"
               >
                 <option value="">All Sources</option>
                 <option value="api">API</option>
                 <option value="aws">AWS</option>
-                <option value="ad">AD</option>
+                <option value="ad">Active Directory</option>
                 <option value="firewall">Firewall</option>
                 <option value="AUTH_SERVER">Auth Server</option>
               </select>
-            </div>
+            </FilterField>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-slate-600">
-                Event Type
-              </label>
+            <FilterField label="Event Type">
               <input
                 type="text"
                 name="eventType"
-                placeholder="e.g. LOGIN, ERROR"
+                placeholder="LOGIN_FAILED"
                 defaultValue={params.eventType || ""}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm transition-all placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full border border-slate-700 bg-[#0b0f14] px-3 py-2.5 text-sm text-slate-300 outline-none transition placeholder:text-slate-700 focus:border-cyan-500"
               />
-            </div>
+            </FilterField>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-slate-600">
-                Source IP
-              </label>
+            <FilterField label="Source IP">
               <input
                 type="text"
                 name="srcIp"
-                placeholder="e.g. 192.168.1.1"
+                placeholder="203.0.113.7"
                 defaultValue={params.srcIp || ""}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm transition-all placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full border border-slate-700 bg-[#0b0f14] px-3 py-2.5 font-mono text-sm text-slate-300 outline-none transition placeholder:text-slate-700 focus:border-cyan-500"
               />
-            </div>
+            </FilterField>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-slate-600">User</label>
+            <FilterField label="User">
               <input
                 type="text"
                 name="user"
-                placeholder="Username or email"
+                placeholder="alice"
                 defaultValue={params.user || ""}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm transition-all placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full border border-slate-700 bg-[#0b0f14] px-3 py-2.5 text-sm text-slate-300 outline-none transition placeholder:text-slate-700 focus:border-cyan-500"
               />
-            </div>
+            </FilterField>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-slate-600">
-                Severity (0-10)
-              </label>
+            <FilterField label="Severity">
               <input
                 type="number"
                 name="severity"
                 min="0"
                 max="10"
-                placeholder="Severity level"
+                placeholder="0 - 10"
                 defaultValue={params.severity || ""}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm transition-all placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full border border-slate-700 bg-[#0b0f14] px-3 py-2.5 text-sm text-slate-300 outline-none transition placeholder:text-slate-700 focus:border-cyan-500"
               />
-            </div>
+            </FilterField>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-slate-600">From</label>
+            <FilterField label="From">
               <input
                 type="datetime-local"
                 name="from"
                 defaultValue={params.from || ""}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full border border-slate-700 bg-[#0b0f14] px-3 py-2.5 text-sm text-slate-300 outline-none transition [color-scheme:dark] focus:border-cyan-500"
               />
-            </div>
+            </FilterField>
 
-            <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-slate-600">To</label>
+            <FilterField label="To">
               <input
                 type="datetime-local"
                 name="to"
                 defaultValue={params.to || ""}
-                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 shadow-sm transition-all focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                className="w-full border border-slate-700 bg-[#0b0f14] px-3 py-2.5 text-sm text-slate-300 outline-none transition [color-scheme:dark] focus:border-cyan-500"
               />
-            </div>
+            </FilterField>
 
             <div className="flex items-end gap-2">
               <button
                 type="submit"
-                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-blue-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:scale-[0.98]"
+                className="flex flex-1 items-center justify-center gap-2 bg-cyan-500 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
               >
                 <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
                   viewBox="0 0 24 24"
+                  fill="none"
+                  className="h-4 w-4"
+                  stroke="currentColor"
+                  strokeWidth="1.8"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
+                  <circle cx="11" cy="11" r="6" />
+                  <path d="m16 16 4 4" />
                 </svg>
-                Apply Filters
+                Apply
               </button>
 
               <a
-                href="/logs"
-                className="flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:bg-slate-50 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 active:scale-[0.98]"
+                href={ROUTES.LOGS}
+                className="flex items-center justify-center border border-slate-700 bg-[#0b0f14] px-4 py-2.5 text-sm font-medium text-slate-400 transition hover:border-slate-600 hover:text-slate-200"
               >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
                 Reset
               </a>
             </div>
@@ -210,183 +194,146 @@ export default async function LogsPage({
         </form>
 
         {!success ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl bg-white px-6 py-16 text-center shadow-sm ring-1 ring-slate-200">
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-50">
-              <svg
-                className="h-8 w-8 text-red-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                />
-              </svg>
+          <div className="border border-red-900/60 bg-red-950/30 p-8">
+            <div className="flex items-start gap-4">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center border border-red-900 bg-red-950/60 text-red-400">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="h-5 w-5"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                >
+                  <path d="M12 3 3 20h18L12 3Z" />
+                  <path d="M12 9v4M12 17h.01" />
+                </svg>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-red-300">
+                  Unable to retrieve logs
+                </h3>
+
+                <p className="mt-1 text-sm text-red-400/70">
+                  The log query could not be completed.
+                </p>
+              </div>
             </div>
-            <h3 className="text-lg font-semibold text-slate-900">
-              Failed to load logs
-            </h3>
-            <p className="mt-1 text-sm text-slate-500">
-              Something went wrong while fetching the log data. Please try
-              again.
-            </p>
           </div>
         ) : data.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-2xl bg-white px-6 py-16 text-center shadow-sm ring-1 ring-slate-200">
-            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
-              <svg
-                className="h-8 w-8 text-slate-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
+          <div className="flex min-h-72 items-center justify-center border border-slate-800 bg-[#0e141b] p-8">
+            <div className="text-center">
+              <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center border border-slate-800 bg-[#0b0f14] text-slate-600">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  className="h-5 w-5"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                >
+                  <path d="M5 4h14v16H5z" />
+                  <path d="M8 8h8M8 12h8M8 16h5" />
+                </svg>
+              </div>
+
+              <h3 className="text-sm font-medium text-slate-300">
+                No events found
+              </h3>
+
+              <p className="mt-1 text-xs text-slate-600">
+                Adjust the filters to broaden your search.
+              </p>
             </div>
-            <h3 className="text-lg font-semibold text-slate-900">
-              No logs found
-            </h3>
-            <p className="mt-1 text-sm text-slate-500">
-              Try adjusting your filters or clearing them to see all entries.
-            </p>
           </div>
         ) : (
-          <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+          <div className="overflow-hidden border border-slate-800 bg-[#0e141b]">
+            <div className="flex items-center justify-between border-b border-slate-800 px-5 py-4">
+              <div>
+                <h2 className="text-sm font-semibold text-slate-200">
+                  Event Stream
+                </h2>
+
+                <p className="mt-1 font-mono text-[9px] uppercase tracking-[0.14em] text-slate-600">
+                  Normalized security logs
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+
+                <span className="font-mono text-[10px] text-slate-500">
+                  {data.length} records
+                </span>
+              </div>
+            </div>
+
             <div className="overflow-x-auto">
-              <table className="w-full min-w-200 border-collapse">
+              <table className="w-full min-w-[950px] border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200 bg-slate-50 text-left">
-                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                      Time
-                    </th>
-                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                      Source
-                    </th>
-                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                      Event Type
-                    </th>
-                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                      Source IP
-                    </th>
-                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                      User
-                    </th>
-                    <th className="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                      Severity
-                    </th>
+                  <tr className="border-b border-slate-800 bg-[#0b0f14] text-left">
+                    <TableHeader>Timestamp</TableHeader>
+                    <TableHeader>Source</TableHeader>
+                    <TableHeader>Event Type</TableHeader>
+                    <TableHeader>Source IP</TableHeader>
+                    <TableHeader>User</TableHeader>
+                    <TableHeader>Severity</TableHeader>
                   </tr>
                 </thead>
 
-                <tbody className="divide-y divide-slate-100">
-                  {data.map((log, index) => (
+                <tbody>
+                  {data.map((log) => (
                     <tr
                       key={log._id}
-                      className={`transition-colors hover:bg-slate-50 ${
-                        index % 2 === 0 ? "bg-white" : "bg-slate-50/50"
-                      }`}
+                      className="border-b border-slate-800/70 transition last:border-b-0 hover:bg-[#111820]"
                     >
-                      <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-slate-900">
+                      <td className="whitespace-nowrap px-5 py-3.5">
                         <div className="flex items-center gap-2">
-                          <svg
-                            className="h-4 w-4 text-slate-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                          </svg>
-                          {new Date(log.timestamp).toLocaleString()}
+                          <span className="h-1.5 w-1.5 rounded-full bg-slate-600" />
+
+                          <span className="font-mono text-xs text-slate-400">
+                            {new Date(log.timestamp).toLocaleString()}
+                          </span>
                         </div>
                       </td>
 
-                      <td className="whitespace-nowrap px-6 py-4">
-                        <span className="inline-flex items-center rounded-md bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
-                          {log.source}
-                        </span>
+                      <td className="whitespace-nowrap px-5 py-3.5">
+                        <SourceBadge source={log.source} />
                       </td>
 
-                      <td className="px-6 py-4 text-sm text-slate-700">
-                        <span className="font-medium text-slate-900">
+                      <td className="px-5 py-3.5">
+                        <span className="font-mono text-xs font-medium text-slate-300">
                           {log.eventType}
                         </span>
                       </td>
 
-                      <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-600">
-                        <span className="inline-flex items-center gap-1.5 rounded-md bg-slate-100 px-2 py-1 font-mono text-xs text-slate-700">
-                          <svg
-                            className="h-3 w-3 text-slate-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-                            />
-                          </svg>
-                          {log.srcIp || "-"}
-                        </span>
+                      <td className="whitespace-nowrap px-5 py-3.5">
+                        {log.srcIp ? (
+                          <span className="border border-slate-800 bg-[#0b0f14] px-2 py-1 font-mono text-xs text-slate-400">
+                            {log.srcIp}
+                          </span>
+                        ) : (
+                          <span className="text-slate-700">—</span>
+                        )}
                       </td>
 
-                      <td className="px-6 py-4 text-sm text-slate-700">
+                      <td className="px-5 py-3.5">
                         {log.user ? (
                           <div className="flex items-center gap-2">
-                            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-linear-to-br from-purple-400 to-pink-500 text-xs font-semibold text-white">
+                            <div className="flex h-6 w-6 items-center justify-center border border-slate-700 bg-slate-900 text-[10px] font-semibold text-cyan-400">
                               {log.user.charAt(0).toUpperCase()}
                             </div>
-                            <span className="font-medium text-slate-900">
+
+                            <span className="text-xs text-slate-400">
                               {log.user}
                             </span>
                           </div>
                         ) : (
-                          <span className="text-slate-400">-</span>
+                          <span className="text-slate-700">—</span>
                         )}
                       </td>
 
-                      <td className="whitespace-nowrap px-6 py-4">
-                        {log.severity !== null && log.severity !== undefined ? (
-                          <span
-                            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ring-1 ring-inset ${
-                              log.severity >= 8
-                                ? "bg-red-50 text-red-700 ring-red-700/20"
-                                : log.severity >= 5
-                                  ? "bg-amber-50 text-amber-700 ring-amber-700/20"
-                                  : log.severity >= 3
-                                    ? "bg-blue-50 text-blue-700 ring-blue-700/20"
-                                    : "bg-emerald-50 text-emerald-700 ring-emerald-700/20"
-                            }`}
-                          >
-                            <span
-                              className={`h-1.5 w-1.5 rounded-full ${
-                                log.severity >= 8
-                                  ? "bg-red-500"
-                                  : log.severity >= 5
-                                    ? "bg-amber-500"
-                                    : log.severity >= 3
-                                      ? "bg-blue-500"
-                                      : "bg-emerald-500"
-                              }`}
-                            ></span>
-                            Severity {log.severity}
-                          </span>
-                        ) : (
-                          <span className="text-slate-400">-</span>
-                        )}
+                      <td className="whitespace-nowrap px-5 py-3.5">
+                        <SeverityBadge severity={log.severity} />
                       </td>
                     </tr>
                   ))}
@@ -397,5 +344,88 @@ export default async function LogsPage({
         )}
       </div>
     </div>
+  );
+}
+
+function FilterField({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-2">
+      <label className="font-mono text-[10px] uppercase tracking-[0.13em] text-slate-600">
+        {label}
+      </label>
+
+      {children}
+    </div>
+  );
+}
+
+function TableHeader({ children }: { children: React.ReactNode }) {
+  return (
+    <th className="px-5 py-3 font-mono text-[10px] font-medium uppercase tracking-[0.13em] text-slate-600">
+      {children}
+    </th>
+  );
+}
+
+function SourceBadge({ source }: { source: string }) {
+  let style = "border-slate-700 text-slate-400";
+
+  if (source.toLowerCase() === "api") {
+    style = "border-cyan-900 text-cyan-400";
+  }
+
+  if (source.toLowerCase() === "aws") {
+    style = "border-amber-900 text-amber-400";
+  }
+
+  if (source.toLowerCase() === "ad") {
+    style = "border-purple-900 text-purple-400";
+  }
+
+  if (source.toLowerCase() === "firewall") {
+    style = "border-emerald-900 text-emerald-400";
+  }
+
+  return (
+    <span
+      className={`inline-flex border bg-[#0b0f14] px-2 py-1 font-mono text-[10px] uppercase tracking-wide ${style}`}
+    >
+      {source}
+    </span>
+  );
+}
+
+function SeverityBadge({ severity }: { severity?: number }) {
+  if (severity === null || severity === undefined) {
+    return <span className="text-slate-700">—</span>;
+  }
+
+  let style = "border-emerald-900 text-emerald-400";
+  let dot = "bg-emerald-400";
+
+  if (severity >= 8) {
+    style = "border-red-900 text-red-400";
+    dot = "bg-red-400";
+  } else if (severity >= 5) {
+    style = "border-amber-900 text-amber-400";
+    dot = "bg-amber-400";
+  } else if (severity >= 3) {
+    style = "border-cyan-900 text-cyan-400";
+    dot = "bg-cyan-400";
+  }
+
+  return (
+    <span
+      className={`inline-flex items-center gap-2 border bg-[#0b0f14] px-2 py-1 font-mono text-[10px] ${style}`}
+    >
+      <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
+      {severity}
+    </span>
   );
 }

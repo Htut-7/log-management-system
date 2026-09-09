@@ -1,5 +1,5 @@
 const ROUTES = {
-  DASHBOARD: "/dashboard",
+  DASHBOARD: "/",
   LOGS: "/log",
   LOGIN: "/Login",
 };
