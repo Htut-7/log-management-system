@@ -1,3 +1,4 @@
+import { timeStamp } from "console";
 import { Schema, model, models, Document } from "mongoose";
 
 export interface ILog {
@@ -136,6 +137,44 @@ const logSchema = new Schema(
     },
   },
   { timestamps: true },
+);
+
+logSchema.index({
+  tenant: 1,
+  timeStamp: -1,
+});
+
+logSchema.index({
+  tenant: 1,
+  source: 1,
+  timestamp: -1,
+});
+
+logSchema.index({
+  tenant: 1,
+  eventType: 1,
+  timestamp: -1,
+});
+
+logSchema.index({
+  tenant: 1,
+  srcIp: 1,
+  timestamp: -1,
+});
+
+logSchema.index({
+  tenant: 1,
+  user: 1,
+  timestamp: -1,
+});
+
+logSchema.index(
+  {
+    createdAt: 1,
+  },
+  {
+    expireAfterSeconds: 7 * 24 * 60 * 60,
+  },
 );
 
 const Log = models?.Log || model<ILog>("Log", logSchema);

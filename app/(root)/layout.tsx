@@ -67,7 +67,7 @@ export default async function RootLayout({
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                className="h-[18px] w-[18px] text-slate-500 transition group-hover:text-cyan-400"
+                className="h-4.5 w-4.5 text-slate-500 transition group-hover:text-cyan-400"
                 stroke="currentColor"
                 strokeWidth="1.7"
               >
@@ -87,7 +87,7 @@ export default async function RootLayout({
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                className="h-[18px] w-[18px] text-slate-500 transition group-hover:text-cyan-400"
+                className="h-4.5 w-4.5 text-slate-500 transition group-hover:text-cyan-400"
                 stroke="currentColor"
                 strokeWidth="1.7"
               >
@@ -105,7 +105,7 @@ export default async function RootLayout({
               <svg
                 viewBox="0 0 24 24"
                 fill="none"
-                className="h-[18px] w-[18px] text-slate-500 transition group-hover:text-amber-400"
+                className="h-4.5 w-4.5 text-slate-500 transition group-hover:text-amber-400"
                 stroke="currentColor"
                 strokeWidth="1.7"
               >
@@ -133,7 +133,7 @@ export default async function RootLayout({
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
-                    className="h-[18px] w-[18px] text-slate-500 transition group-hover:text-cyan-400"
+                    className="h-4.5 w-4.5 text-slate-500 transition group-hover:text-cyan-400"
                     stroke="currentColor"
                     strokeWidth="1.7"
                   >
@@ -152,7 +152,7 @@ export default async function RootLayout({
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
-                    className="h-[18px] w-[18px] text-slate-500 transition group-hover:text-cyan-400"
+                    className="h-4.5 w-4.5 text-slate-500 transition group-hover:text-cyan-400"
                     stroke="currentColor"
                     strokeWidth="1.7"
                   >

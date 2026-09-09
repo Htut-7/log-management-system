@@ -185,7 +185,7 @@ export default async function AlertRulesPage() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[900px]">
+              <table className="w-full min-w-225">
                 <thead>
                   <tr className="border-b border-slate-800 bg-[#0b0f14] text-left">
                     <TableHeader>Name</TableHeader>
