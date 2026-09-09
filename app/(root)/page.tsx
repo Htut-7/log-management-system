@@ -1,7 +1,20 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import { GetDashboardStats } from "@/lib/actions/GetDashboardStats.action";
 
-export default async function DashboardPage() {
-  const { success, data } = await GetDashboardStats();
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    from?: string;
+    to?: string;
+  }>;
+}) {
+  const params = await searchParams;
+
+  const { success, data } = await GetDashboardStats({
+    from: params.from ? new Date(params.from) : undefined,
+    to: params.to ? new Date(params.to) : undefined,
+  });
 
   if (!success || !data) {
     return (
@@ -99,6 +112,51 @@ export default async function DashboardPage() {
             </span>
           </div>
         </div>
+
+        <form
+          method="GET"
+          className="mb-6 flex flex-col gap-4 border border-slate-800 bg-[#0e141b] p-4 sm:flex-row sm:items-end"
+        >
+          <div className="flex flex-1 flex-col gap-2">
+            <label className="font-mono text-[10px] uppercase tracking-[0.13em] text-slate-600">
+              From
+            </label>
+
+            <input
+              type="datetime-local"
+              name="from"
+              defaultValue={params.from || ""}
+              className="border border-slate-700 bg-[#0b0f14] px-3 py-2.5 text-sm text-slate-300 outline-none [color-scheme:dark] focus:border-cyan-500"
+            />
+          </div>
+
+          <div className="flex flex-1 flex-col gap-2">
+            <label className="font-mono text-[10px] uppercase tracking-[0.13em] text-slate-600">
+              To
+            </label>
+
+            <input
+              type="datetime-local"
+              name="to"
+              defaultValue={params.to || ""}
+              className="border border-slate-700 bg-[#0b0f14] px-3 py-2.5 text-sm text-slate-300 outline-none [color-scheme:dark] focus:border-cyan-500"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
+          >
+            Apply Range
+          </button>
+
+          <a
+            href="/"
+            className="border border-slate-700 bg-[#0b0f14] px-5 py-2.5 text-center text-sm font-medium text-slate-400 transition hover:text-white"
+          >
+            Reset
+          </a>
+        </form>
 
         <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <StatCard

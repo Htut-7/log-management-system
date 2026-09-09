@@ -99,7 +99,7 @@ export default async function RootLayout({
             </Link>
 
             <Link
-              href="/alerts"
+              href={ROUTES.ALERTS}
               className="group flex items-center gap-3 border border-transparent px-3 py-2.5 text-sm text-slate-400 transition hover:border-slate-800 hover:bg-[#111820] hover:text-slate-100"
             >
               <svg
@@ -127,7 +127,7 @@ export default async function RootLayout({
 
               <div className="space-y-1">
                 <Link
-                  href="/alert-rules"
+                  href={ROUTES.ALERTRULES}
                   className="group flex items-center gap-3 border border-transparent px-3 py-2.5 text-sm text-slate-400 transition hover:border-slate-800 hover:bg-[#111820] hover:text-slate-100"
                 >
                   <svg
