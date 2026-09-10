@@ -5,9 +5,14 @@ const server = dgram.createSocket("udp4");
 const PORT = Number(process.env.SYSLOG_PORT || 5514);
 
 const INGEST_URL =
-  process.env.SYSLOG_INGEST_URL || "http://localhost:3000/api/ingest/syslog";
+  process.env.SYSLOG_INGEST_URL ||
+  "http://localhost:3000/api/ingest/syslog";
 
 const API_KEY = process.env.INGEST_API_KEY_TENANTA;
+
+if (!API_KEY) {
+  throw new Error("INGEST_API_KEY_TENANTA is missing");
+}
 
 server.on("message", async (buffer, remote) => {
   const message = buffer.toString("utf8").trim();

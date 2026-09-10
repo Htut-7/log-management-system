@@ -1,5 +1,6 @@
 
 import { GetDashboardStats } from "@/lib/actions/GetDashboardStats.action";
+import Link from "next/link";
 
 export default async function DashboardPage({
   searchParams,
@@ -172,12 +173,12 @@ export default async function DashboardPage({
     Apply Filters
   </button>
 
-  <a
+  <Link
     href="/"
     className="border border-slate-700 bg-[#0b0f14] px-5 py-2.5 text-center text-sm font-medium text-slate-400 transition hover:text-white"
   >
     Reset
-  </a>
+  </Link>
 </form>
 
         <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

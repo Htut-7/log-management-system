@@ -24,5 +24,22 @@ services:
       MONGODB_URI: mongodb://mongo:27017/log-management-system
       NODE_ENV: production
 
+  syslog:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: log-management-syslog
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "5514:5514/udp"
+    env_file:
+      - .env.local
+    environment:
+      SYSLOG_PORT: 5514
+      SYSLOG_INGEST_URL: http://app:3000/api/ingest/syslog
+    command: ["node", "ingest/syslog-server.mjs"]
+
 volumes:
   mongo_data:
