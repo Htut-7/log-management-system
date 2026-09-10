@@ -153,26 +153,6 @@ export default async function RootLayout({
 
                   <span>Alert Rules</span>
                 </Link>
-
-                <Link
-                  href="/admin"
-                  className="group flex items-center gap-3 border border-transparent px-3 py-2.5 text-sm text-slate-400 transition hover:border-slate-800 hover:bg-[#111820] hover:text-slate-100"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    className="h-4.5 w-4.5 text-slate-500 transition group-hover:text-cyan-400"
-                    stroke="currentColor"
-                    strokeWidth="1.7"
-                  >
-                    <circle cx="9" cy="8" r="3" />
-                    <circle cx="17" cy="9" r="2" />
-                    <path d="M3 20c0-4 2.5-6 6-6s6 2 6 6" />
-                    <path d="M15 14c3 0 5 1.8 5 5" />
-                  </svg>
-
-                  <span>Users</span>
-                </Link>
               </div>
             </>
           )}

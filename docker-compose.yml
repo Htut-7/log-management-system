@@ -1,0 +1,28 @@
+services:
+  mongo:
+    image: mongo:8
+    container_name: log-management-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: log-management-app
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.local
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/log-management-system
+      NODE_ENV: production
+
+volumes:
+  mongo_data:

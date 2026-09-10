@@ -1,13 +1,23 @@
-$url = "http://localhost:3000/api/ingest"
-$apiKey = "tenantA-demo-secret-key"
+param (
+    [Parameter(Mandatory=$true)]
+    [string]$ApiKey,
 
-for ($i = 1; $i -le 5; $i++) {
+    [string]$Ip = "198.51.100.88",
+
+    [string]$User = "tenantb-test-user",
+
+    [int]$Count=5
+)
+
+$url = "http://localhost:3000/api/ingest"
+
+for ($i = 1; $i -le $Count; $i++) {
     $payload = @{
         source = "api"
         data = @{
             event_type = "app_login_failed"
-            user = "sample-attacker"
-            ip = "203.0.113.220"
+            user = $User
+            ip = $Ip
         }
     } | ConvertTo-Json -Depth 10
 
@@ -16,12 +26,12 @@ for ($i = 1; $i -le 5; $i++) {
             -Uri $url `
             -Method POST `
             -Headers @{
-                "x-api-key" = $apiKey
+                "x-api-key" = $ApiKey
             } `
             -ContentType "application/json" `
             -Body $payload
 
-        Write-Host "Sent LOGIN_FAILED $i/5"
+        Write-Host "Sent LOGIN_FAILED $i/$Count - $User - $Ip"
     }
     catch {
         Write-Host "Request $i failed" -ForegroundColor Red

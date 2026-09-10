@@ -3,11 +3,13 @@ param (
     [string]$Source,
 
     [Parameter(Mandatory=$true)]
-    [string]$File
+    [string]$File,
+
+    [Parameter(Mandatory=$true)]
+    [string]$ApiKey
 )
 
 $url = "http://localhost:3000/api/batch"
-$apiKey = "tenantA-demo-secret-key"
 
 $logs = Get-Content $File -Raw | ConvertFrom-Json
 
@@ -24,7 +26,7 @@ try {
         -Uri $url `
         -Method POST `
         -Headers @{
-            "x-api-key" = $apiKey
+            "x-api-key" = $ApiKey
         } `
         -ContentType "application/json" `
         -Body $payload
