@@ -17,3 +17,4 @@ Sends failed-login events through the HTTP ingestion endpoint.
 
 ```powershell
 .\samples\send_api_logs.ps1 -ApiKey "tenantA-demo-secret-key" -Ip "203.0.113.230" -User "tenantA-test-user" -Count 5
+

@@ -14,10 +14,16 @@ export default async function DashboardPage({
   const params = await searchParams;
 
   const { success, data } = await GetDashboardStats({
-    source: params.source || undefined,
-    from: params.from ? new Date(params.from) : undefined,
-    to: params.to ? new Date(params.to) : undefined,
-  });
+  source: params.source || undefined,
+
+  from: params.from
+    ? new Date(`${params.from}T00:00:00.000`)
+    : undefined,
+
+  to: params.to
+    ? new Date(`${params.to}T23:59:59.999`)
+    : undefined,
+});
 
   if (!success || !data) {
     return (

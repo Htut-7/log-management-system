@@ -6,7 +6,7 @@ param (
 
     [string]$User = "tenantb-test-user",
 
-    [int]$Count=5
+    [int]$Count=10
 )
 
 $url = "http://localhost:3000/api/ingest"

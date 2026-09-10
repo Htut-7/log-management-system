@@ -1,0 +1,140 @@
+{
+  "info": {
+    "name": "Log Management System",
+    "description": "API requests for testing log ingestion, batch ingestion, and Syslog forwarding.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    },
+    {
+      "key": "apiKey",
+      "value": "<TENANT_A_API_KEY>"
+    }
+  ],
+  "item": [
+    {
+      "name": "Ingest API Log",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"source\": \"api\",\n  \"data\": {\n    \"event_type\": \"app_login_failed\",\n    \"user\": \"postman-user\",\n    \"ip\": \"203.0.113.150\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/ingest",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "ingest"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Batch Active Directory Logs",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"source\": \"ad\",\n  \"data\": [\n    {\n      \"@timestamp\": \"2026-09-10T10:00:00Z\",\n      \"event_id\": 4625,\n      \"user\": \"postman-ad-user\",\n      \"host\": \"workstation-01\",\n      \"ip\": \"10.0.0.50\"\n    },\n    {\n      \"@timestamp\": \"2026-09-10T10:01:00Z\",\n      \"event_id\": 4624,\n      \"user\": \"postman-ad-user\",\n      \"host\": \"workstation-01\",\n      \"ip\": \"10.0.0.50\"\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/batch",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "batch"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Batch AWS Logs",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"source\": \"aws\",\n  \"data\": [\n    {\n      \"@timestamp\": \"2026-09-10T10:05:00Z\",\n      \"event_type\": \"CONSOLE_LOGIN\",\n      \"user\": \"postman-aws-user\"\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/batch",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "batch"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Forward Syslog Message",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "x-api-key",
+            "value": "{{apiKey}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"source\": \"firewall\",\n  \"message\": \"<134>Sep 10 17:00:00 firewall action=deny src=192.168.1.50 spt=51515 dst=172.16.0.20 dpt=22 proto=tcp\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/ingest/syslog",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "ingest",
+            "syslog"
+          ]
+        }
+      }
+    }
+  ]
+}
