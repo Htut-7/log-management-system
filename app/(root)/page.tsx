@@ -1,10 +1,11 @@
-/* eslint-disable @next/next/no-html-link-for-pages */
+
 import { GetDashboardStats } from "@/lib/actions/GetDashboardStats.action";
 
 export default async function DashboardPage({
   searchParams,
 }: {
   searchParams: Promise<{
+    source?: string;
     from?: string;
     to?: string;
   }>;
@@ -12,6 +13,7 @@ export default async function DashboardPage({
   const params = await searchParams;
 
   const { success, data } = await GetDashboardStats({
+    source: params.source || undefined,
     from: params.from ? new Date(params.from) : undefined,
     to: params.to ? new Date(params.to) : undefined,
   });
@@ -113,50 +115,70 @@ export default async function DashboardPage({
           </div>
         </div>
 
+        
+
         <form
-          method="GET"
-          className="mb-6 flex flex-col gap-4 border border-slate-800 bg-[#0e141b] p-4 sm:flex-row sm:items-end"
-        >
-          <div className="flex flex-1 flex-col gap-2">
-            <label className="font-mono text-[10px] uppercase tracking-[0.13em] text-slate-600">
-              From
-            </label>
+  method="GET"
+  className="mb-6 flex flex-col gap-4 border border-slate-800 bg-[#0e141b] p-4 sm:flex-row sm:items-end"
+>
+  <div className="flex flex-1 flex-col gap-2">
+    <label className="font-mono text-[10px] uppercase tracking-[0.13em] text-slate-600">
+      Source
+    </label>
 
-            <input
-              type="datetime-local"
-              name="from"
-              defaultValue={params.from || ""}
-              className="border border-slate-700 bg-[#0b0f14] px-3 py-2.5 text-sm text-slate-300 outline-none [color-scheme:dark] focus:border-cyan-500"
-            />
-          </div>
+    <select
+      name="source"
+      defaultValue={params.source || ""}
+      className="border border-slate-700 bg-[#0b0f14] px-3 py-2.5 text-sm text-slate-300 outline-none focus:border-cyan-500"
+    >
+      <option value="">All Sources</option>
+      <option value="api">API</option>
+      <option value="aws">AWS</option>
+      <option value="ad">Active Directory</option>
+      <option value="firewall">Firewall</option>
+    </select>
+  </div>
 
-          <div className="flex flex-1 flex-col gap-2">
-            <label className="font-mono text-[10px] uppercase tracking-[0.13em] text-slate-600">
-              To
-            </label>
+  <div className="flex flex-1 flex-col gap-2">
+    <label className="font-mono text-[10px] uppercase tracking-[0.13em] text-slate-600">
+      From
+    </label>
 
-            <input
-              type="datetime-local"
-              name="to"
-              defaultValue={params.to || ""}
-              className="border border-slate-700 bg-[#0b0f14] px-3 py-2.5 text-sm text-slate-300 outline-none [color-scheme:dark] focus:border-cyan-500"
-            />
-          </div>
+    <input
+      type="datetime-local"
+      name="from"
+      defaultValue={params.from || ""}
+      className="border border-slate-700 bg-[#0b0f14] px-3 py-2.5 text-sm text-slate-300 outline-none [color-scheme:dark] focus:border-cyan-500"
+    />
+  </div>
 
-          <button
-            type="submit"
-            className="bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
-          >
-            Apply Range
-          </button>
+  <div className="flex flex-1 flex-col gap-2">
+    <label className="font-mono text-[10px] uppercase tracking-[0.13em] text-slate-600">
+      To
+    </label>
 
-          <a
-            href="/"
-            className="border border-slate-700 bg-[#0b0f14] px-5 py-2.5 text-center text-sm font-medium text-slate-400 transition hover:text-white"
-          >
-            Reset
-          </a>
-        </form>
+    <input
+      type="datetime-local"
+      name="to"
+      defaultValue={params.to || ""}
+      className="border border-slate-700 bg-[#0b0f14] px-3 py-2.5 text-sm text-slate-300 outline-none [color-scheme:dark] focus:border-cyan-500"
+    />
+  </div>
+
+  <button
+    type="submit"
+    className="bg-cyan-500 px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
+  >
+    Apply Filters
+  </button>
+
+  <a
+    href="/"
+    className="border border-slate-700 bg-[#0b0f14] px-5 py-2.5 text-center text-sm font-medium text-slate-400 transition hover:text-white"
+  >
+    Reset
+  </a>
+</form>
 
         <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <StatCard

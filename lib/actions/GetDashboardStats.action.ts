@@ -8,6 +8,7 @@ import DashboardStatsSchema from "../schema/DashboardStatsSchema";
 import { actionError } from "../response";
 
 export async function GetDashboardStats(params?: {
+  source?: string;
   from?: Date;
   to?: Date;
 }): Promise<{
@@ -44,13 +45,18 @@ export async function GetDashboardStats(params?: {
     };
   }
 
+
   const validatedData = validateBody(params || {}, DashboardStatsSchema);
 
-  const { from, to } = validatedData.data;
+  const { source, from, to } = validatedData.data;
 
   const filterQuery: Record<string, unknown> = {
     tenant: session.user.tenant,
   };
+
+  if(source){
+    filterQuery.source=source;
+  }
 
   if (from || to) {
     filterQuery.timestamp = {};
