@@ -1,4 +1,4 @@
-import { ILog } from "@/database/models/log.model";
+import type { ILog } from "@/database/models/log.model";
 
 export function NormalizeLog(
   source: string,
